@@ -1,0 +1,44 @@
+version: "3.5"
+services:
+  honeypot-mph:
+    build: .
+    container_name: mph
+    ports:
+     - 53:53/udp
+     - 11211:11211/udp
+     - 123:123/udp
+     - 19:19/udp
+     - 17:17/udp
+     - 27015:27015/udp
+     - 27015:27015/tcp
+     - 1900:1900/udp
+     - 5683:5683/udp
+     - 389:389/udp
+    env_file:
+      - .env
+      - mph.env
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    depends_on:
+      - unbound
+    volumes:
+      - ./logs:/mph/logs
+    networks:
+      - mph-net
+  unbound:
+    image: mvance/unbound:latest
+    container_name: mph-unbound
+    volumes:
+      - ./unbound.conf:/opt/unbound/etc/unbound/unbound.conf:ro
+    networks:
+      mph-net:
+        ipv4_address: ${UNBOUND_IP}
+
+networks:
+  mph-net:
+    name: ${MPH_NET}
+    ipam:
+      driver: default
+      config:
+        - subnet: ${MPH_SUBNET}

@@ -1,0 +1,10 @@
+#pip3 list
+dnslib==0.9.7
+utils==0.9.0
+psutil==5.4.0
+tqdm==4.24.0
+python-dateutil==2.7.3
+asyncio==3.4.3
+tornado==6.0.3
+pyasn1==0.4.8
+aiocoap==0.4.3
